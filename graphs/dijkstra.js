@@ -9,40 +9,60 @@ var graph = {
 };
 console.log(graph);
 
-console.log(findShortestPath(graph, "A"));
+console.log(findShortestPath(graph, "A", "F"));
 
-function findShortestPath(graph, start) {
+function findShortestPath(graph, start, end) {
+	const visited = new Set();
+	const distances = {};
 	const nodes = Object.keys(graph);
-	let distances = {};
-	let visited = new Set();
+	const parents = { [start]: null };
 
-	// Set all unknown distances to Infinity
+	// Set distances to Infnity if unknown
 	for (const node of nodes) {
 		distances[node] = Infinity;
 	}
 	distances[start] = 0;
 
-	while(nodes.length) {
-		// get the closest node on each iteration
-		nodes.sort((a,b) => distances[a] - distances[b])
-		nodes.shift()
-		console.log({closestNode});
+	// Visit each Vetrice (Loop over), choosing the shortest distance to each neighbour each time
 
-		if (closestNode === Infinity) break;
-		visited.add(closestNode)
+	while (nodes.length) {
+		// sorts nodes to get shortest distance
+		nodes.sort((a, b) => distances[a] - distances[b]);
+		const closestNode = nodes.shift();
 
-		for (const neighbor in graph[closestNode]) {
-			
-			if (!visited.has(neighbor)) {
-				const newDistance = distances[closestNode] + graph[closestNode][neighbor]
-				if (newDistance < distances[neighbor]) {
-				distances[neighbor] = newDistance
-				}
+		visited.add(closestNode);
+		if (distances[closestNode] === Infinity) break;
 
+		for (const neighbour in graph[closestNode]) {
+			// Only unvisited vertrices
+			if (visited.has(neighbour)) continue;
+
+			// update distance if new distance is smaller than current
+			const newDistance =
+				distances[closestNode] + graph[closestNode][neighbour];
+
+			if (newDistance < distances[neighbour]) {
+				distances[neighbour] = newDistance;
+				parents[neighbour] = closestNode;
 			}
 		}
-
 	}
 
-	return distances
+	// backtrack to return optimal path
+	const path = [end];
+	getParent(end);
+	console.log(path.join(" => "));
+
+	function getParent(node) {
+		const parent = parents[node];
+		if (parent === null) return;
+		path.unshift(parent);
+		getParent(parent);
+	}
+
+	return  { 
+    distances, 
+    path: path.join(" => "),
+    distance: distances[end]
+};
 }
