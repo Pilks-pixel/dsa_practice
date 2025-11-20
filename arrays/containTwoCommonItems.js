@@ -28,5 +28,8 @@ function containsCommonItems(array1, array2) {
     return false
 }
 
+// const newArray = new Array(1000000).fill('z');
+// const newArray = Array.from({length: 1e6}, (_, i) => i === 999999 ? 'x' : 'z');
+
 console.log(containsCommonItems(['a', 'b', 'c', 'x'], ['z', 'y', 'i']));
 console.log(containsCommonItems(['a', 'b', 'c', 'x'], ['z', 'y', 'x']));
