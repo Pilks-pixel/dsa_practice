@@ -28,3 +28,25 @@ function gcdOfStrings(str1: string, str2: string): string {
     }
 
 };
+
+function gcdOfStringsMath(str1: string, str2: string): string {
+    // Step 1: Check if a common base is even possible
+    if (str1 + str2 !== str2 + str1) {
+        return "";
+    }
+
+    // Step 2: Find GCD of the lengths
+    const gcd = (a: number, b: number): number => {
+        while (b !== 0) {
+            const temp = b;
+            b = a % b;
+            a = temp;
+        }
+        return a;
+    };
+
+    const gcdLength = gcd(str1.length, str2.length);
+
+    // Step 3: The GCD string is the prefix of that length
+    return str1.slice(0, gcdLength);
+}
